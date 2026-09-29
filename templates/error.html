@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}{{ title or 'Something went wrong' }} · Basic Statistics Calculator{% endblock %}
+{% block content %}
+<main id="main-content" class="workspace"><section class="panel confirmation-panel"><span class="empty-icon">{{ icon('info') }}</span><h1>{{ title or 'Something went wrong' }}</h1><p>{{ message or 'Please return to your workspace and try again.' }}</p><a class="button button-primary" href="{{ url_for('index') }}">{% if g.user %}Back to calculator{% else %}Back to log in{% endif %}</a></section></main>
+{% endblock %}

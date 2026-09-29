@@ -1,0 +1,52 @@
+{% from '_icons.html' import icon %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Calculate basic statistics, understand your dataset, and keep your calculations together.">
+  <title>{% block title %}Basic Statistics Calculator{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  {% if g.user %}
+  <header class="site-header">
+    <div class="nav-container">
+      <a class="brand" href="{{ url_for('dashboard') }}" aria-label="Basic Statistics Calculator home">
+        <span class="brand-mark">{{ icon('chart') }}</span>
+        <span>Basic Statistics<span class="brand-caption">A little clarity in every number.</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint in ['dashboard', 'calculate', 'view_calculation'] %}active{% endif %}" {% if request.endpoint in ['dashboard', 'calculate', 'view_calculation'] %}aria-current="page"{% endif %}>{{ icon('calculator') }}<span>Calculator</span></a>
+        <a href="{{ url_for('history') }}" class="nav-link {% if request.endpoint in ['history', 'clear_history'] %}active{% endif %}" {% if request.endpoint == 'history' %}aria-current="page"{% endif %}>{{ icon('history') }}<span>History</span></a>
+      </nav>
+      <div class="account-nav">
+        <span class="avatar" aria-hidden="true">{{ g.user['username'][0]|upper }}</span>
+        <span class="account-name">{{ g.user['username'] }}</span>
+        <form method="post" action="{{ url_for('logout') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="logout-button" type="submit">{{ icon('logout') }}<span>Log out</span></button>
+        </form>
+      </div>
+    </div>
+  </header>
+  {% endif %}
+  <!-- Flash messages are escaped by Jinja, including text derived from user input. -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-stack" aria-live="polite">
+      {% for category, message in messages %}
+      <div class="flash flash-{{ category }}" role="{% if category == 'error' %}alert{% else %}status{% endif %}">{{ icon('info') }}<span>{{ message }}</span></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+  {% block footer %}
+  <footer class="site-footer"><span>Basic Statistics Calculator</span><span>Make sense of your numbers.</span></footer>
+  {% endblock %}
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Log in · Basic Statistics Calculator{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block content %}
+<main id="main-content" class="auth-layout">
+  {% include '_auth_intro.html' %}
+  <section class="auth-form-side" aria-labelledby="login-title">
+    <div class="auth-form-wrap">
+      <span class="section-icon">{{ icon('calculator') }}</span>
+      <p class="eyebrow">YOUR STATISTICS WORKSPACE</p>
+      <h2 id="login-title">Welcome back.</h2>
+      <p class="auth-description">Log in to pick up where your numbers left off.</p>
+      <form method="post" action="{{ url_for('login') }}" class="auth-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-field"><label for="identifier">Username or email</label><input id="identifier" name="identifier" type="text" autocomplete="username" placeholder="Enter your username or email" value="{{ request.form.get('identifier', '') }}" required maxlength="254"></div>
+        <div class="form-field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required maxlength="128"></div>
+        <button class="button button-primary button-full" type="submit">Log in</button>
+      </form>
+      <p class="auth-switch">New here? <a href="{{ url_for('register') }}">Create an account</a></p>
+      <div class="privacy-note">{{ icon('lock') }} Your calculation history belongs to your account.</div>
+    </div>
+  </section>
+</main>
+{% endblock %}
+{% block footer %}{% endblock %}

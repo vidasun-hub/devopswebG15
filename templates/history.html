@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Calculation history · Basic Statistics Calculator{% endblock %}
+{% block content %}
+<main id="main-content" class="workspace">
+  <div class="page-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h1>Calculation history<span class="heading-dot">.</span></h1><p>A place for every dataset and every discovery.</p></div><a class="button button-primary" href="{{ url_for('dashboard') }}">{{ icon('calculator') }} New calculation</a></div>
+  <section class="panel history-panel" aria-labelledby="history-title">
+    <div class="section-heading history-toolbar"><h2 id="history-title">Saved calculations <span class="mini-count">{{ calculations|length }}</span></h2>{% if calculations %}<a class="button button-danger-subtle" href="{{ url_for('clear_history') }}">{{ icon('trash') }} Clear all history</a>{% endif %}</div>
+    {% if calculations %}
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Your calculation history table">
+      <table class="history-table"><thead><tr><th scope="col">Date &amp; time</th><th scope="col">Dataset</th><th scope="col">Mean</th><th scope="col">Median</th><th scope="col">Mode</th><th scope="col">Std. deviation</th><th scope="col">Actions</th></tr></thead><tbody>
+      {% for item in calculations %}<tr>
+        <td><time datetime="{{ item['created_at'] }}" data-local-time>{{ item['created_at'] }} UTC</time></td>
+        <td><div class="table-dataset">{% for value in (item['dataset']|dataset_values)[:8] %}{{ value|number }}{% if not loop.last %}, {% endif %}{% endfor %}{% if item['dataset']|dataset_values|length > 8 %}…{% endif %}</div><span class="table-meta">{{ item['dataset']|dataset_values|length }} values</span></td>
+        <td>{{ item['mean']|number }}</td><td>{{ item['median']|number }}</td><td><span class="table-mode">{{ item['mode']|modes }}</span></td><td>{{ item['standard_deviation']|number }}</td>
+        <td><div class="table-actions"><a class="button button-small button-secondary" href="{{ url_for('view_calculation', calculation_id=item['id']) }}" aria-label="View calculation {{ item['id'] }}">View</a><form method="post" action="{{ url_for('delete_history', calculation_id=item['id']) }}" data-confirm="Delete this calculation? This cannot be undone."><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="icon-button danger-icon" aria-label="Delete calculation {{ item['id'] }}">{{ icon('trash') }}</button></form></div></td>
+      </tr>{% endfor %}</tbody></table>
+    </div>
+    <div class="table-footer">{{ icon('lock') }} <span>Only calculations saved to your account appear here. <span id="time-zone-note">Times shown in UTC.</span></span></div>
+    {% else %}<div class="history-empty"><span class="empty-icon large">{{ icon('history') }}</span><h2>A clean slate.</h2><p>Calculate your first dataset and your results<br>will be waiting for you here.</p><a class="button button-primary" href="{{ url_for('dashboard') }}">Open calculator</a></div>{% endif %}
+  </section>
+</main>
+{% endblock %}

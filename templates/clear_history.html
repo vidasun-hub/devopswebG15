@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}Clear history · Basic Statistics Calculator{% endblock %}
+{% block content %}
+<main id="main-content" class="workspace"><section class="panel confirmation-panel"><span class="empty-icon danger-icon">{{ icon('trash') }}</span><h1>Clear all your history?</h1><p>This will permanently delete {{ history_count }} saved calculation{% if history_count != 1 %}s{% endif %} from your account. This cannot be undone.</p><div class="confirmation-actions"><a class="button button-secondary" href="{{ url_for('history') }}">Keep my history</a><form action="{{ url_for('clear_history') }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="confirm" value="yes"><button type="submit" class="button button-danger">Yes, clear all history</button></form></div></section></main>
+{% endblock %}

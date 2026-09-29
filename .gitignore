@@ -1,0 +1,19 @@
+# Python environments and generated caches
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Generated database files and local secrets
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+.env
+
+# Editor / operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
